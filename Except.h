@@ -1,3 +1,5 @@
-namespace Except {
-  void react();
+namespace QApp {
+    namespace Except {
+      void react();
+    }
 }

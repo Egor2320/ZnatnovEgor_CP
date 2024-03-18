@@ -1,9 +1,9 @@
 #include "Except.h"
-#include "PersistentStack.h"
+#include "Kernel/PersistentStack.h"
 
 int main() {
     try{
-        Persistent::PersistentStack<int> s;
+        QApp::Persistent::PersistentStack<int> s;
         s.push(1, 0);
         s.push(2, 0);
         s.push(3, 1);
@@ -15,7 +15,7 @@ int main() {
         s.pop(4);
         std::cout << s;
     } catch (...) {
-        Except::react();
+        QApp::Except::react();
     }
     return 0;
 }
