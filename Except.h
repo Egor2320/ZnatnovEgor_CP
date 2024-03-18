@@ -1,0 +1,3 @@
+namespace Except {
+  void react();
+}

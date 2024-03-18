@@ -1,13 +1,9 @@
-#include <cassert>
-#include <iostream>
-#include <vector>
-
+#include <cstddef>
 namespace Persistent {
     template<typename T>
-    class Node {
-        public:
+    struct Node {
         T value;
-        Node<T> *next;
-        Node(T _value, Node<T> *_next) : value(_value), next(_next) {}
+        size_t current;
+        size_t next;
     };
 }

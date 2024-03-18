@@ -1,92 +1,90 @@
 #include "Node.h"
 
+#include <cassert>
+#include <iostream>
+#include <set>
+#include <vector>
+
 namespace Persistent {
 
     template <typename T>
     class PersistentStack {
+
+       using Node = Node<T>;
+       using RetType = std::conditional<sizeof(T) < 256, T, T&>;
+
+       template <class U> friend std::ostream &operator << (std::ostream &os, PersistentStack<U> st);
+
+
         public:
         PersistentStack() {
-            versions.resize(1, nullptr);
-            sizesOfVersions.resize(1, 0);
-            currentSize = 0;
+          versions_.back().current = 0;
+          versions_.back().next = 0;
         }
 
-        ~PersistentStack() {
-            for (auto node : unique_nodes) {
-                delete node;
-            }
+        size_t currentNumOfVersions() const {
+            return versions_.size();
         }
 
-        std::size_t currentNumOfVersions() {
-            return versions.size();
-        }
-
-        bool empty(int numOfVersion) {
+        bool empty(size_t numOfVersion) const {
             assert(numOfVersion < currentNumOfVersions() && "Error! This version does not exist");
 
-            return sizesOfVersions[numOfVersion] == 0;
+            return sizesOfVersions_[numOfVersion] == 0;
         }
 
-        void push(T value, int numOfVersion) {
+        void push(T val, size_t numOfVersion) {
             assert(numOfVersion < currentNumOfVersions() && "PUSH: Error! The version you're pushing to does not exist!");
 
-            versions.push_back(new Node(value, versions[numOfVersion]));
-            unique_nodes.push_back(versions.back());
-            currentSize = sizesOfVersions[numOfVersion] + 1;
-            sizesOfVersions.push_back(currentSize);
+            versions_.reserve(versions_.size() + 1);
+            versions_.push_back({std::move(val), currentNumOfVersions(), versions_[numOfVersion].current});
+            sizesOfVersions_.push_back(sizesOfVersions_[numOfVersion] + 1);
         }
 
-        void pop(int numOfVersion) {
+        void pop(size_t numOfVersion) {
+            assert(numOfVersion < currentNumOfVersions() && "Error! This version does not exist");
             assert(!empty(numOfVersion) && "POP: Error! Stack is empty!");
 
-            versions.push_back(versions[numOfVersion]->next);
-            currentSize = sizesOfVersions[numOfVersion] - 1;
-            sizesOfVersions.push_back(currentSize);
+            size_t head_index = versions_[numOfVersion].next;
+            versions_.push_back(versions_[head_index]);
+            sizesOfVersions_.push_back(sizesOfVersions_[numOfVersion] - 1);
         }
 
-        T top(int numOfVersion) {
+        RetType top(size_t numOfVersion) const {
             assert(numOfVersion < currentNumOfVersions() && "TOP: Error! The version you're popping from does not exist!");
             assert(!empty(numOfVersion) && "TOP: Error! Stack is empty!");
 
-            return versions[numOfVersion]->value;
+            return versions_[numOfVersion].value;
         }
 
-        std::size_t size(int numOfVersion) {
+        size_t size(size_t numOfVersion) const {
             assert(numOfVersion < currentNumOfVersions() && "Error! This version does not exist!");
 
-            return sizesOfVersions[numOfVersion];
+            return sizesOfVersions_[numOfVersion];
         }
 
-        void print() {
-            for (int i = 0; i < versions.size(); ++i) {
-                std::cout << "Version " << i << ": ";
-                Persistent::Node<T> *currentHead = versions[i];
-                while (currentHead) {
-                    std::cout << currentHead->value << ' ';
-                    currentHead = currentHead->next;
-                }
-                std::cout << '\n';
-            }
-        }
-
-        void swapStacks(PersistentStack<T> &other) {
-            std::swap(this->versions, other.versions);
-            std::swap(this->sizesOfVersions, other.sizesOfVersions);
-            std::swap(this->currentSize, other.currentSize);
-        }
-
-        void copyVersion(int numOfVersion) {
+        void copyVersion(size_t numOfVersion) {
             assert(numOfVersion < currentNumOfVersions() && "Error! This version does not exist");
 
-            versions.push_back(versions[numOfVersion]);
-            sizesOfVersions.push_back(sizesOfVersions[numOfVersion]);
+            versions_.push_back(versions_[numOfVersion]);
+            sizesOfVersions_.push_back(sizesOfVersions_[numOfVersion]);
         }
 
         private:
-        std::vector<Persistent::Node<T> *> versions;
-        std::vector<size_t> sizesOfVersions;
-        std::vector<Persistent::Node<T> *> unique_nodes;
-        size_t currentSize;
-
+        std::vector<Node> versions_ = std::vector<Node>(1);
+        std::vector<size_t> sizesOfVersions_ = std::vector<size_t>(1, 0);;
     };
+
+    template <typename T>
+    std::ostream &operator << (std::ostream &os, PersistentStack<T> st) {
+        for (size_t i = 0; i < st.versions_.size(); ++i) {
+            os << "Version " << i << ": ";
+            Node currentHead = st. versions_[i];
+            while (currentHead.next != currentHead.current) {
+                os << currentHead.value << ' ';
+                currentHead = st.versions_[currentHead.next];
+            }
+            os << '\n';
+        }
+        return os;
+    }
 }
