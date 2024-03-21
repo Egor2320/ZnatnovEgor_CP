@@ -3,7 +3,7 @@
 
 int main() {
     try{
-        QApp::Persistent::PersistentStack<int> s;
+        QApp::Kernel::PersistentStack<int> s;
         s.push(1, 0);
         s.push(2, 0);
         s.push(3, 1);

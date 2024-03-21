@@ -13,5 +13,5 @@ namespace QApp {
           //TODO: think about exception and react on them
         }
       }
-    }
-}
+    }// namespace Except
+}// namespace QApp

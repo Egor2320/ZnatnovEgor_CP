@@ -5,7 +5,7 @@
 #include <vector>
 
 namespace QApp{
-    namespace Persistent {
+    namespace Kernel {
 
         template <typename T>
         class PersistentStack {
@@ -87,5 +87,5 @@ namespace QApp{
             }
             return os;
         }
-    }
-}
+    }// namespace Kernel
+}// namespace QApp
