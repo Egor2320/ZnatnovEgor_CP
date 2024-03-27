@@ -25,9 +25,11 @@ HEADERS += \
     Interface/mainwindow.h \
     Except.h \
     Kernel/ActionRequest.h \
+    Kernel/MouseState.h \
     Kernel/Node.h \
     Kernel/Pallette.h \
     Kernel/PersistentStack.h \
+    Kernel/PersistentStackController.h \
     Kernel/PersistentStackModel.h \
     QPort.h \
     QRuntime.h
