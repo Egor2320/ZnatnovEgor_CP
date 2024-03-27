@@ -1,7 +1,9 @@
 #include "Except.h"
 #include "Kernel/PersistentStack.h"
+#include "QRuntime.h"
 
-int main() {
+int main(int argc, char** argv) {
+    //QApp::QRuntime runtime(argc, argv);
     try{
         QApp::Kernel::PersistentStack<int> s;
         s.push(1, 0);

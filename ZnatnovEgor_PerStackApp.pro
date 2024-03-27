@@ -9,17 +9,24 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Application.cpp \
+    ApplicationImplementation.cpp \
+    QObserver.cpp \
     QPort.cpp \
+    QRuntime.cpp \
     main.cpp \
     Interface/mainwindow.cpp \
-    Except.cpp \
+    Except.cpp
 
 HEADERS += \
+    Application.h \
+    ApplicationImplementation.h \
     Interface/mainwindow.h \
     Except.h \
     Kernel/Node.h \
     Kernel/PersistentStack.h \
-    QPort.h
+    QPort.h \
+    QRuntime.h
 
 FORMS += \
     Interface/mainwindow.ui
