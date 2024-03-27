@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     Application.cpp \
     ApplicationImplementation.cpp \
+    Kernel/Pallette.cpp \
     QObserver.cpp \
     QPort.cpp \
     QRuntime.cpp \
@@ -23,8 +24,11 @@ HEADERS += \
     ApplicationImplementation.h \
     Interface/mainwindow.h \
     Except.h \
+    Kernel/ActionRequest.h \
     Kernel/Node.h \
+    Kernel/Pallette.h \
     Kernel/PersistentStack.h \
+    Kernel/PersistentStackModel.h \
     QPort.h \
     QRuntime.h
 

@@ -1,3 +1,4 @@
+#include "ActionRequest.h"
 #include "Node.h"
 
 #include <cassert>
@@ -67,6 +68,19 @@ namespace QApp{
 
                 versions_.push_back(versions_[numOfVersion]);
                 sizesOfVersions_.push_back(sizesOfVersions_[numOfVersion]);
+            }
+
+            void perform_action(ActionRequest<T>& request) {
+                switch(request.actionCode) {
+                case 'P':
+                    push(request.value, request.version);
+                    break;
+                case 'D':
+                    pop(request.version);
+                    break;
+                default:
+                    std::cout << "This operation code is not supported!\n";
+                }
             }
 
             private:
